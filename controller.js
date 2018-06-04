@@ -1,5 +1,5 @@
 const fs = require('fs');
-const {spawn} = require('child_process');
+const exec = require('child-process-promise').exec;
 
 const asr = async (ctx) => {
     ctx.response.type = 'application/json';
@@ -8,10 +8,10 @@ const asr = async (ctx) => {
     let stream = fs.createWriteStream('./upload.ogg');
     reader.pipe(stream);
     console.log('Uploaded to %s', file.name, stream.path);
-    let ffmpeg = spawn('ffmpeg', ['-hide_banner', '-i', 'upload.ogg', '-ar', '16000', '-ac', '1', 'upload.wav']);
-    ffmpeg.stdout.on('data', (data)=>{
-        console.log(`ffmpeg output: ${data}`);
-    });
+
+    let ffmpeg = await exec('ffmpeg -y -hide_banner -i upload.ogg -ar 16000 -ac 1 upload.wav');
+    console.log(`ffmpeg output: ${ffmpeg.stdout}`);
+    console.log(`ffmpeg error: ${ffmpeg.stderr}`);
     
     ctx.response.body = {
         'msg': 'OK'
