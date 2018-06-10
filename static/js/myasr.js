@@ -8,6 +8,17 @@ stop.disabled = true;
 recog.disabled = true;
 reset.disabled = true;
 
+function toChinese(str) {
+    let reg = new RegExp("([\u4E00-\u9FA5]+\\s*)+");
+    let result;
+    let ret = "";
+    if ((result = reg.exec(str)) != null) {
+        return result[0];
+    }
+    else 
+        return null;
+}
+
 navigator.mediaDevices.getUserMedia({
     audio: true,
     video: false
@@ -64,8 +75,10 @@ navigator.mediaDevices.getUserMedia({
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
+                let decode_res = JSON.parse(xhr.responseText);
+                let res_text = toChinese(decode_res.msg);
                 result.style.color = 'orange';
-                result.innerHTML = 'Finished decoding.';
+                result.innerHTML = `Decode result: ${res_text}`;
             }
         };
         let formData = new FormData();
