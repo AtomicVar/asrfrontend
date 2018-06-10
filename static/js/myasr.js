@@ -62,6 +62,12 @@ navigator.mediaDevices.getUserMedia({
         let blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
 
         let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                result.style.color = 'orange';
+                result.innerHTML = 'Finished decoding.';
+            }
+        };
         let formData = new FormData();
         formData.append('wav', blob);
 
@@ -69,7 +75,7 @@ navigator.mediaDevices.getUserMedia({
         xhr.send(formData);
 
         result.style.color = 'orange';
-        result.innerHTML = 'Uploading your speech and analyzing...'
+        result.innerHTML = 'Uploading your speech and analyzing...';
     };
 
     /* Reset */
