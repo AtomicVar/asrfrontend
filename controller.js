@@ -3,6 +3,7 @@ const exec = require('child-process-promise').exec;
 
 const asr = async (ctx) => {
     let demo_dir = '../online_demo/';
+    let wav_output = '../online_demo/online-data/audio_auto/upload.wav';
     ctx.response.type = 'application/json';
     let file = ctx.request.files[0];
     let reader = fs.createReadStream(file.path);
@@ -10,7 +11,7 @@ const asr = async (ctx) => {
     reader.pipe(stream);
     console.log('Uploaded to %s', file.name, stream.path);
 
-    let ffmpeg = await exec('ffmpeg -y -hide_banner -i upload.ogg -ar 16000 -ac 1 upload.wav');
+    let ffmpeg = await exec(`ffmpeg -y -hide_banner -i upload.ogg -ar 16000 -ac 1 ${wav_output}`);
     console.log('ffmpeg.stdout: ' + ffmpeg.stdout);
     console.log('ffmpeg.stderr: ' + ffmpeg.stderr);
     let run = await exec(demo_dir + 'run_auto.sh');
@@ -18,7 +19,7 @@ const asr = async (ctx) => {
     console.log('run.stderr: ' + run.stderr);
     
     ctx.response.body = {
-        'msg': 'OK'
+        'msg': run.stdout
     };
 };
 
