@@ -4,4 +4,4 @@
 
 ## 架构
 
-![架构图](https://wx3.sinaimg.cn/mw1024/8163951ely1fupmtlzuxwj20vi0hrglx.jpg)
+![架构图](http://wx3.sinaimg.cn/large/8163951ely1fupmtlzuxwj20vi0hrglx.jpg)
